@@ -4,6 +4,13 @@ import pandas as pd
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
+logger.basicConfig(
+    level=logger.DEBUG, 
+    filename = "test_service.log", 
+    format = "%(asctime)s - %(module)s - %(levelname)s - %(funcName)s: %(lineno)d - %(message)s", 
+    datefmt='%H:%M:%S',
+    )
+
 class Recommendations:
 
     def __init__(self):
@@ -33,14 +40,11 @@ class Recommendations:
             recs = self._recs["personal"].loc[user_id]
             recs = recs["track_id"].to_list()[:k]
             self._stats["request_personal_count"] += 1
-            print('check_1')
         except KeyError:
-            print('check_2')
             recs = self._recs["default"]
             recs = recs["track_id"].to_list()[:k]
             self._stats["request_default_count"] += 1
         except:
-            print('check_3')
             logger.error("No recommendations found")
             recs = []
 

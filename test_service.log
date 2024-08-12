@@ -1,0 +1,10 @@
+17:08:59 - recommendations_service - INFO - load: 99 - Loading data, type: <class 'type'>
+17:08:59 - recommendations_service - INFO - load: 101 - Loaded
+17:08:59 - recommendations_service - INFO - load: 70 - Loading data, type: <class 'type'>
+17:08:59 - recommendations_service - INFO - load: 72 - Loaded
+17:08:59 - recommendations_service - INFO - load: 29 - Loading recommendations, type: personal
+17:08:59 - recommendations_service - INFO - load: 33 - Loaded
+17:08:59 - recommendations_service - INFO - load: 29 - Loading recommendations, type: default
+17:08:59 - recommendations_service - INFO - load: 33 - Loaded
+17:08:59 - recommendations_service - INFO - lifespan: 144 - Starting
+17:09:10 - recommendations_service - ERROR - get: 110 - No recommendations found
