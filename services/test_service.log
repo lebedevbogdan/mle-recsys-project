@@ -1,0 +1,13 @@
+19:01:13 - recommendations_service - INFO - load: 104 - Loading previous events
+19:01:13 - recommendations_service - INFO - load: 106 - Loaded events
+19:01:13 - recommendations_service - INFO - load: 74 - Loading recommendations, type: similar
+19:01:13 - recommendations_service - INFO - load: 76 - Loaded similar
+19:01:13 - recommendations_service - INFO - load: 31 - Loading recommendations, type: personal
+19:01:13 - recommendations_service - INFO - load: 35 - Loaded personal
+19:01:13 - recommendations_service - INFO - load: 31 - Loading recommendations, type: default
+19:01:13 - recommendations_service - INFO - load: 35 - Loaded default
+19:01:13 - recommendations_service - INFO - lifespan: 153 - Starting
+19:01:17 - recommendations_service - INFO - get: 53 - {'request_personal_count': 1, 'request_default_count': 0}
+19:01:17 - recommendations_service - INFO - get: 53 - {'request_personal_count': 1, 'request_default_count': 1}
+19:01:17 - recommendations_service - INFO - get: 53 - {'request_personal_count': 2, 'request_default_count': 1}
+19:08:44 - recommendations_service - INFO - lifespan: 156 - Stopping
