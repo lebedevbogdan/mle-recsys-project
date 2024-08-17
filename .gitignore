@@ -162,7 +162,7 @@ cython_debug/
 #.idea/
 
 # data
-*.parquet
+# *.parquet
 *.pickle
 
 # project environment

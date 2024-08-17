@@ -12,7 +12,9 @@ logger.basicConfig(
     )
 
 class Recommendations:
-
+    """
+    Класс, отвечающий за персональные и базовые рекомендации
+    """
     def __init__(self):
 
         self._recs = {"personal": None, "default": None}
@@ -21,22 +23,23 @@ class Recommendations:
             "request_default_count": 0,
         }
 
-    def load(self, type, path, **kwargs):
+    def load(self, type_rec, path, **kwargs):
         """
         Загружает рекомендации из файла
         """
 
-        logger.info(f"Loading recommendations, type: {type}")
-        self._recs[type] = pd.read_parquet(path, **kwargs)
-        if type == "personal":
-            self._recs[type] = self._recs[type].set_index("user_id")
-        logger.info(f"Loaded")
+        logger.info(f"Loading recommendations, type: {type_rec}")
+        self._recs[type_rec] = pd.read_parquet(path, **kwargs)
+        if type_rec == "personal":
+            self._recs[type_rec] = self._recs[type_rec].set_index("user_id")
+        logger.info(f"Loaded {type_rec}")
 
     def get(self, user_id: int, k: int=100):
         """
         Возвращает список рекомендаций для пользователя
         """
         try:
+            # Проверка, есть ли персональные рекомедации для конкретного пользователя, .loc[user_id] выдаст ошибку, если юзера нет. Тогда выдадим ему топ-100, то есть deafult
             recs = self._recs["personal"].loc[user_id]
             recs = recs["track_id"].to_list()[:k]
             self._stats["request_personal_count"] += 1
@@ -47,7 +50,7 @@ class Recommendations:
         except:
             logger.error("No recommendations found")
             recs = []
-
+        logger.info(self._stats)
         return recs
 
     def stats(self):
@@ -57,7 +60,9 @@ class Recommendations:
             logger.info(f"{name:<30} {value} ")
 
 class SimilarItems:
-
+    """
+    Класс, отвечающий за рекомендации на основе схожих itemов.
+    """
     def __init__(self):
 
         self._similar_items = None
@@ -66,10 +71,9 @@ class SimilarItems:
         """
         Загружаем данные из файла
         """
-
-        logger.info(f"Loading data, type: {type}")
+        logger.info(f"Loading recommendations, type: similar")
         self._similar_items = pd.read_parquet(path, **kwargs).set_index('track_id')
-        logger.info(f"Loaded")
+        logger.info(f"Loaded similar")
 
     def get(self, item_id: int, k: int = 10):
         """
@@ -85,7 +89,9 @@ class SimilarItems:
         return i2i
     
 class EventStore:
-
+    """
+    Класс, отвечающий за последние события для пользователя
+    """
     def __init__(self, max_events_per_user=10):
 
         self.events = None
@@ -95,10 +101,9 @@ class EventStore:
         """
         Загружаем данные из файла
         """
-
-        logger.info(f"Loading data, type: {type}")
+        logger.info(f"Loading previous events")
         self.events = pd.read_parquet(path, **kwargs).set_index('user_id')
-        logger.info(f"Loaded")
+        logger.info(f"Loaded events")
     
     def get(self, user_id, k):
         """
@@ -107,7 +112,6 @@ class EventStore:
         try:
             user_events = self.events.loc[user_id].sort_values(by='track_seq', ascending=False).head(k)['track_id'].to_list()
         except:
-            logger.error("No recommendations found")
             user_events = []
         return user_events
 
@@ -117,24 +121,29 @@ sim_items_store = SimilarItems()
 
 rec_store = Recommendations()
 
+# Загружаем все предыдущие события для пользователей
 events_store.load(
-    "events_train_sample.parquet",
+    "../files/events_train_sample.parquet",
     columns=["user_id", "track_id", "track_seq"],
 )
 
+# Загружаем схожие айтемы для каждого трека
 sim_items_store.load(
-    "similar_items_sample.parquet",
+    "../files/similar_items_sample.parquet",
     columns=["track_id", "track_id_recommended", "score"],
 )
 
+# Загружаем персональные рекомендации для пользователей, которые попали в предыдущие события
 rec_store.load(
     "personal",
-    "als_recommendations_sample.parquet",
+    "../files/als_recommendations_sample.parquet",
     columns=["user_id", "track_id", "score"],
     )
+
+# Загружаем дефолтные рекомендации топ-100
 rec_store.load(
     "default",
-    "top_popular.parquet",
+    "../files/top_popular.parquet",
     columns=["track_id", "score"],
     )
 
@@ -153,9 +162,7 @@ async def recommendations_offline(user_id: int, k: int = 10):
     """
     Возвращает список рекомендаций длиной k для пользователя user_id
     """
-
     recs = rec_store.get(user_id, k)
-
     return {"recs": recs}
 
 async def recommendations_online(user_id: int, k: int = 1):
@@ -172,7 +179,6 @@ async def recommendations_online(user_id: int, k: int = 1):
     else:
         recs = []
 
-    
     return {"recs": recs}
 
 
