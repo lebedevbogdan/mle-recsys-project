@@ -1,13 +1,41 @@
-19:01:13 - recommendations_service - INFO - load: 104 - Loading previous events
-19:01:13 - recommendations_service - INFO - load: 106 - Loaded events
-19:01:13 - recommendations_service - INFO - load: 74 - Loading recommendations, type: similar
-19:01:13 - recommendations_service - INFO - load: 76 - Loaded similar
-19:01:13 - recommendations_service - INFO - load: 31 - Loading recommendations, type: personal
-19:01:13 - recommendations_service - INFO - load: 35 - Loaded personal
-19:01:13 - recommendations_service - INFO - load: 31 - Loading recommendations, type: default
-19:01:13 - recommendations_service - INFO - load: 35 - Loaded default
-19:01:13 - recommendations_service - INFO - lifespan: 153 - Starting
-19:01:17 - recommendations_service - INFO - get: 53 - {'request_personal_count': 1, 'request_default_count': 0}
-19:01:17 - recommendations_service - INFO - get: 53 - {'request_personal_count': 1, 'request_default_count': 1}
-19:01:17 - recommendations_service - INFO - get: 53 - {'request_personal_count': 2, 'request_default_count': 1}
-19:08:44 - recommendations_service - INFO - lifespan: 156 - Stopping
+23:05:17 - test_service - INFO - test_endpoint: 39 - testing root endpoint
+23:05:17 - test_service - INFO - test_endpoint: 42 - Got status 200
+23:05:17 - test_service - INFO - test_non_personal: 64 - Testing the 10 top_popular for user_id = 1179649, with no recommendations, without a history
+23:05:17 - test_service - INFO - test_non_personal: 67 - Got status 200
+23:05:19 - test_service - INFO - test_non_personal: 69 - recommendations for user_id = 1179649:
+1 | Smells Like Teen Spirit | Nirvana | alternative, rock, allrock
+2 | Believer | Imagine Dragons | rock, allrock
+3 | Numb | Linkin Park | numetal, metal
+4 | I Got Love | Miyagi & Эндшпиль, Рем Дигга | rusrap, rap
+5 | Way Down We Go | KALEO | indie
+6 | Shape Of My Heart | Sting | pop, rock, allrock
+7 | Seven Nation Army | The White Stripes | alternative
+8 | Shape of You | Ed Sheeran | pop
+9 | Zombie | The Cranberries | rock, allrock
+10 | Life | Zivert | pop, ruspop
+23:05:19 - test_service - INFO - test_only_personal: 46 - Testing the ouput of recommendations for user_id = 1, with personal recommendations, without a history
+23:05:19 - test_service - INFO - test_only_personal: 49 - Got status 200
+23:05:21 - test_service - INFO - test_only_personal: 50 - recommendations for user_id = 1:
+1 | Song From A Secret Garden | Secret Garden | pop, classicalmusic, modern
+2 | Tokyo Drift (Fast & Furious) | Teriyaki Boyz | foreignrap, rap
+3 | The Lost Song | The Cat Empire | pop, funk, rnb
+4 | Say It Right | Nelly Furtado | pop
+5 | Пачка сигарет | КИНО | rusrock, allrock
+6 | Don't Speak | No Doubt | pop
+7 | Dancin | Aaron Smith, Krono, Luvli | electronics, house
+8 | All Star | Smash Mouth | rock, allrock
+9 | Big Big World | Emilia | pop
+10 | Du Hast | Rammstein | metal, industrial
+23:05:21 - test_service - INFO - test_personal_online: 55 - Testing the ouput of recommendations for user_id = 0, with personal recommendations, with a history
+23:05:21 - test_service - INFO - test_personal_online: 58 - Got status 200
+23:05:22 - test_service - INFO - test_personal_online: 59 - recommendations for user_id = 0:
+1 | Режиссер | Градусы | pop, ruspop
+2 | Told | Noah Slee | rnb
+3 | We Made You | Eminem | foreignrap, rap
+4 | Drip | Luke James, A$AP Ferg | rnb
+5 | Hello | Lionel Richie | pop
+6 | Electro World | Perfume | pop, japanesepop
+7 | Say It Right | Nelly Furtado | pop
+8 | Читаю мысли | ОУ74 | rusrap, rap
+9 | Behind Blue Eyes | Limp Bizkit | numetal, metal
+10 | Burning | Manowar | classicmetal, metal

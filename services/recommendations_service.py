@@ -4,12 +4,12 @@ import pandas as pd
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-logger.basicConfig(
-    level=logger.DEBUG, 
-    filename = "test_service.log", 
-    format = "%(asctime)s - %(module)s - %(levelname)s - %(funcName)s: %(lineno)d - %(message)s", 
-    datefmt='%H:%M:%S',
-    )
+# logger.basicConfig(
+#     level=logger.DEBUG, 
+#     filename = "test_service.log", 
+#     format = "%(asctime)s - %(module)s - %(levelname)s - %(funcName)s: %(lineno)d - %(message)s", 
+#     datefmt='%H:%M:%S',
+#     )
 
 class Recommendations:
     """
@@ -28,11 +28,11 @@ class Recommendations:
         Загружает рекомендации из файла
         """
 
-        logger.info(f"Loading recommendations, type: {type_rec}")
+        # logger.info(f"Loading recommendations, type: {type_rec}")
         self._recs[type_rec] = pd.read_parquet(path, **kwargs)
         if type_rec == "personal":
             self._recs[type_rec] = self._recs[type_rec].set_index("user_id")
-        logger.info(f"Loaded {type_rec}")
+        # logger.info(f"Loaded {type_rec}")
 
     def get(self, user_id: int, k: int=100):
         """
@@ -50,7 +50,7 @@ class Recommendations:
         except:
             logger.error("No recommendations found")
             recs = []
-        logger.info(self._stats)
+        # logger.info(self._stats)
         return recs
 
     def stats(self):
@@ -71,9 +71,9 @@ class SimilarItems:
         """
         Загружаем данные из файла
         """
-        logger.info(f"Loading recommendations, type: similar")
+        # logger.info(f"Loading recommendations, type: similar")
         self._similar_items = pd.read_parquet(path, **kwargs).set_index('track_id')
-        logger.info(f"Loaded similar")
+        # logger.info(f"Loaded similar")
 
     def get(self, item_id: int, k: int = 10):
         """
@@ -83,7 +83,7 @@ class SimilarItems:
             i2i = self._similar_items.loc[item_id].head(k)
             i2i = i2i[["track_id_recommended", "score"]].to_dict(orient="list")
         except KeyError:
-            logger.error("No recommendations found")
+            # logger.error("No recommendations found")
             i2i = {"track_id_recommended": [], "score": {}}
 
         return i2i
@@ -101,9 +101,9 @@ class EventStore:
         """
         Загружаем данные из файла
         """
-        logger.info(f"Loading previous events")
+        # logger.info(f"Loading previous events")
         self.events = pd.read_parquet(path, **kwargs).set_index('user_id')
-        logger.info(f"Loaded events")
+        # logger.info(f"Loaded events")
     
     def get(self, user_id, k):
         """
@@ -111,7 +111,7 @@ class EventStore:
         """
         try:
             user_events = self.events.loc[user_id].sort_values(by='track_seq', ascending=False).head(k)['track_id'].to_list()
-        except:
+        except KeyError:
             user_events = []
         return user_events
 
@@ -181,6 +181,10 @@ async def recommendations_online(user_id: int, k: int = 1):
 
     return {"recs": recs}
 
+
+@app.get("/")
+async def check():
+    return {'status': 'Alive'}
 
 @app.post("/recommendations")
 async def recommendations(user_id: int, k: int = 10):
